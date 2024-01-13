@@ -167,13 +167,11 @@ kernel void compute_partial(global int *result) {
     const int t = get_local_id(0);
     const int m = get_local_size(0);
 
-    // move parts of array into local
     local int buff[BUFFSIZE];
     buff[t] = result[i];
     barrier(CLK_LOCAL_MEM_FENCE);
 
     int sum = buff[t];
-    // compute in local
     for (int offset = 1; offset < m; offset *= 2) {
         if (t >= offset) {
             sum += buff[t - offset];
